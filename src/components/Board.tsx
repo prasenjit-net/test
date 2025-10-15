@@ -13,7 +13,7 @@ const Board: React.FC<BoardProps> = ({ squares, onClick }) => {
   };
 
   return (
-    <div>
+    <div role="region" aria-label="game board">
       <div className="board-row">
         {renderSquare(0)}
         {renderSquare(1)}

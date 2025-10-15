@@ -18,8 +18,8 @@ const Modal: React.FC<ModalProps> = ({
   player2Type,
 }) => {
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="modal-overlay" data-testid="modal-overlay">
+      <div className="modal-content" data-testid="modal-content">
         <div className="modal-header">
           <h2>Select Players</h2>
         </div>
