@@ -1,4 +1,85 @@
-# Getting Started with Create React App
+# React Tic Tac Toe with AI
+
+An interactive Tic Tac Toe game built with React and TypeScript, featuring AI opponents with multiple difficulty levels.
+
+## Features
+
+- 🎮 Play against another human
+- 🤖 Play against AI with two difficulty levels:
+  - Easy: Makes random moves 70% of the time
+  - Hard: Uses minimax algorithm for optimal play
+- ⏱️ Natural timing for computer moves
+- 🔄 Move history and time travel
+- 🎯 Win detection and draw state handling
+- 📱 Responsive design
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── Board.tsx      # Game board component
+│   ├── Square.tsx     # Individual square component
+│   └── PlayerSelect.tsx # Player type selector
+├── App.tsx            # Main game logic
+└── App.css            # Game styling
+```
+
+## Technology Stack
+
+- React 18
+- TypeScript
+- CSS3
+- Create React App
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm start
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## How to Play
+
+1. Select player types for both X and O:
+
+   - Human: Manual moves
+   - Computer (Easy): AI that makes occasional mistakes
+   - Computer (Hard): Unbeatable AI
+
+2. Click any square to make a move when it's a human player's turn
+
+3. For computer players:
+
+   - Easy mode: Makes random moves 70% of the time
+   - Hard mode: Always makes the optimal move
+
+4. Use the move history buttons to go back to any previous game state
+
+## AI Implementation
+
+- Hard mode uses the minimax algorithm to calculate the optimal move
+- Easy mode randomly chooses between:
+  - Random valid moves (70% probability)
+  - Optimal moves (30% probability)
+- Computer moves have a natural delay (200-600ms) for better UX
+
+## Development Commands
+
+- `npm start`: Run development server
+- `npm test`: Run test suite
+- `npm run build`: Create production build
+- `npm run eject`: Eject from Create React App
+
+## Contributing
+
+Feel free to submit issues and enhancement requests!
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
