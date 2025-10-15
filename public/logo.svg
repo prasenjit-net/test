@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="512" height="512" version="1.1" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
- <rect width="512" height="512" fill="#ffffff"/>
- <g fill="none" stroke="#2196f3" stroke-linecap="round" stroke-width="20">
-  <!-- Board lines -->
-  <path d="m171 86v340"/>
-  <path d="m341 86v340"/>
-  <path d="m86 171h340"/>
-  <path d="m86 341h340"/>
-  <!-- Example X and O -->
-  <path d="m107 107 50 50m0-50-50 50" stroke="#f44336"/>
-  <circle cx="256" cy="256" r="35" stroke="#4caf50"/>
-  <path d="m355 355 50 50m0-50-50 50" stroke="#f44336"/>
- </g>
+    <rect width="512" height="512" fill="#ffffff" />
+    <g fill="none" stroke="#2196f3" stroke-linecap="round" stroke-width="20">
+        <!-- Board lines -->
+        <path d="m171 86v340" />
+        <path d="m341 86v340" />
+        <path d="m86 171h340" />
+        <path d="m86 341h340" />
+        <!-- Example X and O -->
+        <path d="m107 107 50 50m0-50-50 50" stroke="#f44336" />
+        <circle cx="256" cy="256" r="35" stroke="#4caf50" />
+        <path d="m355 355 50 50m0-50-50 50" stroke="#f44336" />
+    </g>
 </svg>
