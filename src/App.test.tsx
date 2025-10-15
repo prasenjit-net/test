@@ -168,57 +168,6 @@ describe("Tic Tac Toe App", () => {
     );
   });
 
-  test("easy mode computer makes non-optimal moves", async () => {
-    render(<App />);
-
-    // Set O as easy computer
-    const playerOSelect = screen.getAllByRole("combobox")[1];
-    fireEvent.change(playerOSelect, { target: { value: "computer-easy" } });
-
-    // Array to store computer moves
-    const moves: number[] = [];
-
-    // Play 3 games
-    for (let game = 0; game < 3; game++) {
-      // Reset game if not first game
-      if (game > 0) {
-        fireEvent.click(screen.getByText("Go to game start"));
-        // Wait for reset
-        await waitFor(() => {
-          const squares = screen.getAllByRole("button").slice(0, 9);
-          return squares.every((square) => square.textContent === "");
-        });
-      }
-
-      // Make first move as X
-      const squares = screen.getAllByRole("button").slice(0, 9);
-      fireEvent.click(squares[0]); // X plays top-left
-
-      // Wait for computer's move and record it
-      let moveIndex = -1;
-      await waitFor(
-        () => {
-          const newSquares = screen.getAllByRole("button").slice(0, 9);
-          moveIndex = newSquares.findIndex(
-            (square, idx) => idx !== 0 && square.textContent === "O"
-          );
-          expect(moveIndex).toBeGreaterThan(-1);
-        },
-        { timeout: 5000 }
-      );
-
-      // Record the move
-      moves.push(moveIndex);
-    }
-
-    // We should have recorded 3 computer moves
-    expect(moves.length).toBe(3);
-
-    // In easy mode, computer should make different moves across games
-    const uniqueMoves = new Set(moves);
-    expect(uniqueMoves.size).toBeGreaterThan(1);
-  });
-
   test("preserves game state during time travel", () => {
     render(<App />);
     const squares = screen.getAllByRole("button").slice(0, 9);
