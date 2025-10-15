@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Board from "./components/Board";
 import PlayerSelect from "./components/PlayerSelect";
 import "./App.css";
@@ -14,110 +14,119 @@ const App: React.FC = () => {
   const [xPlayerType, setXPlayerType] = useState<PlayerType>("human");
   const [oPlayerType, setOPlayerType] = useState<PlayerType>("human");
 
-  const calculateWinner = (squares: Array<string | null>): string | null => {
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
+  const calculateWinner = useCallback(
+    (squares: Array<string | null>): string | null => {
+      const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
 
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (
-        squares[a] &&
-        squares[a] === squares[b] &&
-        squares[a] === squares[c]
-      ) {
-        return squares[a];
-      }
-    }
-    return null;
-  };
-
-  const findBestMove = (squares: Array<string | null>): number => {
-    // Helper function to evaluate board state
-    const evaluate = (squares: Array<string | null>): number => {
-      const winner = calculateWinner(squares);
-      if (winner === "X") return 10;
-      if (winner === "O") return -10;
-      return 0;
-    };
-
-    // Minimax algorithm
-    const minimax = (
-      squares: Array<string | null>,
-      depth: number,
-      isMax: boolean
-    ): number => {
-      const score = evaluate(squares);
-      if (score === 10) return score - depth;
-      if (score === -10) return score + depth;
-      if (!squares.includes(null)) return 0;
-
-      if (isMax) {
-        let best = -1000;
-        squares.forEach((square, idx) => {
-          if (square === null) {
-            squares[idx] = "X";
-            best = Math.max(best, minimax(squares, depth + 1, !isMax));
-            squares[idx] = null;
-          }
-        });
-        return best;
-      } else {
-        let best = 1000;
-        squares.forEach((square, idx) => {
-          if (square === null) {
-            squares[idx] = "O";
-            best = Math.min(best, minimax(squares, depth + 1, !isMax));
-            squares[idx] = null;
-          }
-        });
-        return best;
-      }
-    };
-
-    let bestValue = xIsNext ? -1000 : 1000;
-    let bestMove = -1;
-
-    squares.forEach((square, idx) => {
-      if (square === null) {
-        squares[idx] = xIsNext ? "X" : "O";
-        const moveValue = minimax(squares, 0, !xIsNext);
-        squares[idx] = null;
-
-        if (xIsNext && moveValue > bestValue) {
-          bestValue = moveValue;
-          bestMove = idx;
-        } else if (!xIsNext && moveValue < bestValue) {
-          bestValue = moveValue;
-          bestMove = idx;
+      for (let i = 0; i < lines.length; i++) {
+        const [a, b, c] = lines[i];
+        if (
+          squares[a] &&
+          squares[a] === squares[b] &&
+          squares[a] === squares[c]
+        ) {
+          return squares[a];
         }
       }
-    });
+      return null;
+    },
+    []
+  );
 
-    return bestMove;
-  };
+  const findBestMove = useCallback(
+    (squares: Array<string | null>): number => {
+      // Helper function to evaluate board state
+      const evaluate = (squares: Array<string | null>): number => {
+        const winner = calculateWinner(squares);
+        if (winner === "X") return 10;
+        if (winner === "O") return -10;
+        return 0;
+      };
 
-  const makeMove = (i: number) => {
-    const currentHistory = history.slice(0, stepNumber + 1);
-    const current = currentHistory[currentHistory.length - 1];
-    const squares = current.slice();
+      // Minimax algorithm
+      const minimax = (
+        squares: Array<string | null>,
+        depth: number,
+        isMax: boolean
+      ): number => {
+        const score = evaluate(squares);
+        if (score === 10) return score - depth;
+        if (score === -10) return score + depth;
+        if (!squares.includes(null)) return 0;
 
-    if (calculateWinner(squares) || squares[i]) {
-      return;
-    }
+        if (isMax) {
+          let best = -1000;
+          squares.forEach((square, idx) => {
+            if (square === null) {
+              squares[idx] = "X";
+              best = Math.max(best, minimax(squares, depth + 1, !isMax));
+              squares[idx] = null;
+            }
+          });
+          return best;
+        } else {
+          let best = 1000;
+          squares.forEach((square, idx) => {
+            if (square === null) {
+              squares[idx] = "O";
+              best = Math.min(best, minimax(squares, depth + 1, !isMax));
+              squares[idx] = null;
+            }
+          });
+          return best;
+        }
+      };
 
-    squares[i] = xIsNext ? "X" : "O";
-    setHistory(currentHistory.concat([squares]));
-    setStepNumber(currentHistory.length);
-    setXIsNext(!xIsNext);
-  };
+      let bestValue = xIsNext ? -1000 : 1000;
+      let bestMove = -1;
+
+      squares.forEach((square, idx) => {
+        if (square === null) {
+          squares[idx] = xIsNext ? "X" : "O";
+          const moveValue = minimax(squares, 0, !xIsNext);
+          squares[idx] = null;
+
+          if (xIsNext && moveValue > bestValue) {
+            bestValue = moveValue;
+            bestMove = idx;
+          } else if (!xIsNext && moveValue < bestValue) {
+            bestValue = moveValue;
+            bestMove = idx;
+          }
+        }
+      });
+
+      return bestMove;
+    },
+    [calculateWinner, xIsNext]
+  );
+
+  const makeMove = useCallback(
+    (i: number) => {
+      const currentHistory = history.slice(0, stepNumber + 1);
+      const current = currentHistory[currentHistory.length - 1];
+      const squares = current.slice();
+
+      if (calculateWinner(squares) || squares[i]) {
+        return;
+      }
+
+      squares[i] = xIsNext ? "X" : "O";
+      setHistory(currentHistory.concat([squares]));
+      setStepNumber(currentHistory.length);
+      setXIsNext(!xIsNext);
+    },
+    [history, stepNumber, xIsNext, calculateWinner]
+  );
 
   const getRandomMove = (squares: Array<string | null>): number => {
     const availableMoves = squares
@@ -136,11 +145,11 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    const current = history[stepNumber];
+    const currentSquares = history[stepNumber];
     const currentPlayer = xIsNext ? xPlayerType : oPlayerType;
 
     if (
-      !calculateWinner(current) &&
+      !calculateWinner(currentSquares) &&
       stepNumber < 9 &&
       currentPlayer.startsWith("computer")
     ) {
@@ -154,10 +163,10 @@ const App: React.FC = () => {
           // 70% random moves, 30% best moves for easy mode
           moveIndex =
             Math.random() < 0.7
-              ? getRandomMove(current)
-              : findBestMove(current);
+              ? getRandomMove(currentSquares)
+              : findBestMove(currentSquares);
         } else {
-          moveIndex = findBestMove(current);
+          moveIndex = findBestMove(currentSquares);
         }
 
         if (moveIndex !== -1) {
@@ -167,7 +176,16 @@ const App: React.FC = () => {
 
       return () => clearTimeout(timeoutId);
     }
-  }, [xIsNext, stepNumber, xPlayerType, oPlayerType]);
+  }, [
+    xIsNext,
+    stepNumber,
+    xPlayerType,
+    oPlayerType,
+    findBestMove,
+    makeMove,
+    history,
+    calculateWinner,
+  ]);
 
   const jumpTo = (step: number) => {
     setStepNumber(step);
