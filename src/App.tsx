@@ -248,27 +248,33 @@ const App: React.FC = () => {
           player2Type={oPlayerType}
         />
       ) : (
-        <>
-          <h1 className="game-title">Tic Tac Toe</h1>
-          <div className="game-board">
-            <Board squares={current} onClick={(i) => handleClick(i)} />
+        <div className="game-container">
+          <div className="game-header">
+            <h1 className="game-title">Ultimate Tic Tac Toe</h1>
           </div>
-          <div className="game-info">
-            <div
-              className={`status ${
-                winner ? "winner" : stepNumber === 9 ? "draw" : ""
-              }`}
-              onClick={handleStatusClick}
-              title={winner || stepNumber === 9 ? "Click to restart game" : ""}
-            >
-              {status}
-              {(winner || stepNumber === 9) && (
-                <div className="restart-hint">Click to play again</div>
-              )}
+          <div className="game-content">
+            <div className="game-board">
+              <Board squares={current} onClick={(i) => handleClick(i)} />
             </div>
-            <ol>{moves}</ol>
+            <div className="game-info">
+              <div
+                className={`status ${
+                  winner ? "winner" : stepNumber === 9 ? "draw" : ""
+                }`}
+                onClick={handleStatusClick}
+                title={
+                  winner || stepNumber === 9 ? "Click to restart game" : ""
+                }
+              >
+                {status}
+                {(winner || stepNumber === 9) && (
+                  <div className="restart-hint">Click to play again</div>
+                )}
+              </div>
+              <ol>{moves}</ol>
+            </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

@@ -1,21 +1,52 @@
 .game {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2c3e50, #3498db, #2980b9);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #2c3e50, #3498db, #2980b9);
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0;
 }
 
-@media (min-width: 768px) {
-  .game {
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 40px;
-    padding: 40px;
-  }
+.game-header {
+  text-align: center;
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  margin-bottom: 2rem;
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.game-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3),
+               0 0 20px rgba(255, 255, 255, 0.2);
+  margin: 0;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+.game-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .game-board {
@@ -29,17 +60,6 @@
   width: fit-content;
 }
 
-@media (max-width: 767px) {
-  .game-board {
-    transform: scale(0.9);
-    margin: -10px 0;
-  }
-}
-
-.game-board:hover {
-  transform: translateY(-5px);
-}
-
 .game-info {
   background: rgba(255, 255, 255, 0.1);
   padding: 20px;
@@ -49,8 +69,8 @@
   color: white;
   width: 100%;
   max-width: 300px;
-  margin-top: 20px;
   transition: all 0.3s ease;
+  margin-top: 20px;
 }
 
 .status {
@@ -67,7 +87,6 @@
   cursor: pointer;
   padding: 15px;
   border-radius: 10px;
-  transition: all 0.3s ease;
 }
 
 .status.winner:hover, .status.draw:hover {
@@ -87,6 +106,26 @@
   color: #f1c40f;
   animation: drawPulse 2s infinite;
   text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+}
+
+.restart-hint {
+  font-size: 0.8em;
+  opacity: 0.8;
+  margin-top: 8px;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* Animations */
+@keyframes titleGlow {
+  from {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3),
+                 0 0 20px rgba(255, 255, 255, 0.2);
+  }
+  to {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3),
+                 0 0 30px rgba(255, 255, 255, 0.4);
+  }
 }
 
 @keyframes winnerPulse {
@@ -119,14 +158,6 @@
   }
 }
 
-.restart-hint {
-  font-size: 0.8em;
-  opacity: 0.8;
-  margin-top: 8px;
-  text-align: center;
-  animation: fadeIn 0.5s ease-in;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -138,7 +169,28 @@
   }
 }
 
+/* Responsive styles */
 @media (min-width: 768px) {
+  .game-container {
+    padding: 0;
+  }
+
+  .game-header {
+    padding: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .game-content {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4rem;
+  }
+
+  .game-title {
+    font-size: 3rem;
+  }
+
   .game-info {
     margin-top: 0;
     height: fit-content;
@@ -147,13 +199,18 @@
   }
 }
 
-.player-controls {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-  justify-content: center;
+@media (max-width: 767px) {
+  .game-board {
+    transform: scale(0.9);
+    margin: -10px 0;
+  }
+
+  .game-container {
+    padding: 1rem;
+  }
 }
 
+/* Game info buttons */
 .game-info button {
   background: rgba(255, 255, 255, 0.1);
   border: none;
@@ -167,5 +224,5 @@
 }
 
 .game-info button:hover {
-  background: #e0e0e0;
+  background: rgba(255, 255, 255, 0.2);
 }
