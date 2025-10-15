@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Board from "./components/Board";
-import PlayerSelect from "./components/PlayerSelect";
+import Modal from "./components/Modal";
 import "./App.css";
 
 type PlayerType = "human" | "computer-easy" | "computer-hard";
@@ -213,27 +213,63 @@ const App: React.FC = () => {
     status = "Next player: " + (xIsNext ? "X" : "O");
   }
 
+  const [isGameStarted, setIsGameStarted] = useState(false);
+
+  const handleGameStart = () => {
+    setIsGameStarted(true);
+    setHistory([Array(9).fill(null)]);
+    setStepNumber(0);
+    setXIsNext(true);
+  };
+
+  const handleGameRestart = () => {
+    setIsGameStarted(false);
+  };
+
+  const handleStatusClick = () => {
+    if (winner || stepNumber === 9) {
+      handleGameRestart();
+    }
+  };
+
   return (
     <div className="game">
-      <div className="game-board">
-        <div className="player-controls">
-          <PlayerSelect
-            player="X"
-            currentType={xPlayerType}
-            onTypeChange={setXPlayerType}
-          />
-          <PlayerSelect
-            player="O"
-            currentType={oPlayerType}
-            onTypeChange={setOPlayerType}
-          />
-        </div>
-        <Board squares={current} onClick={(i) => handleClick(i)} />
-      </div>
-      <div className="game-info">
-        <div>{status}</div>
-        <ol>{moves}</ol>
-      </div>
+      {!isGameStarted ? (
+        <Modal
+          onStart={handleGameStart}
+          onPlayerSelectChange={(player, value) => {
+            if (player === "X") {
+              setXPlayerType(value as PlayerType);
+            } else {
+              setOPlayerType(value as PlayerType);
+            }
+          }}
+          player1Type={xPlayerType}
+          player2Type={oPlayerType}
+        />
+      ) : (
+        <>
+          <h1 className="game-title">Tic Tac Toe</h1>
+          <div className="game-board">
+            <Board squares={current} onClick={(i) => handleClick(i)} />
+          </div>
+          <div className="game-info">
+            <div
+              className={`status ${
+                winner ? "winner" : stepNumber === 9 ? "draw" : ""
+              }`}
+              onClick={handleStatusClick}
+              title={winner || stepNumber === 9 ? "Click to restart game" : ""}
+            >
+              {status}
+              {(winner || stepNumber === 9) && (
+                <div className="restart-hint">Click to play again</div>
+              )}
+            </div>
+            <ol>{moves}</ol>
+          </div>
+        </>
+      )}
     </div>
   );
 };
